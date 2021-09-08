@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login | Restoran</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+	<link rel="stylesheet" href="stilovi.css">
+	<style>
+		.pozadina {
+			background-image: url('slike/pozadina.jpg');
+			background-size: 100%;
+			background-repeat: repeat-y;
+			opacity: 0.93;
+		}
+	</style>
+</head>
+<body class="pozadina">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6 col-xs-12">
+				<div class="well" id="forma-registracija">
+					<h1 class="text-center"><u>Login</u></h1>
+					<div class="form-group">
+					    <label for="username">Username</label>
+					    <input type="text" class="form-control" id="username" placeholder="Username...">
+					</div>
+					<div class="form-group lozinka">
+					    <label for="password">Password</label>
+						<input type="password" class="form-control" id="password" placeholder="Password...">
+						<a onclick='vidiPassword();' href="#">Show password</a>
+					</div>
+					<br>
+					<button class="btn btn-primary btn-block" onclick="login();"> <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Sign in</button>
+					<div class="text-center" style="padding-top: 5px;">
+						Nemate nalog? <i><a href="registracija.html"> Ta registrujte se zaboga!</a></i>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
+	<script src="login.js"></script>
+</body>
+</html>

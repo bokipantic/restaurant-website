@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pretraga jela | Restoran</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merienda&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="stilovi.css">
+</head>
+
+<body onload="proveriToken(); izaberiJelo(); kategorijeGrafikon(); podrucjaGrafikon();"
+  style="background-image: url('slike/pozadina2.jpg')">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">Mediteraneo</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="index.html">NASLOVNA</a></li>
+          <li class="active"><a href="pretraga.html">PRETRAGA JELA</a></li>
+          <li><a href="kontakt.html">KONTAKT INFO</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="logout">
+    <a onclick="logout();"><span id="username"></span></a>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="well svetlo_plava">
+          <h3 class="text-center"><u>Izaberite vase jelo</u></h3>
+          <br>
+          <div class="table-responsive">
+            <table class="table" id="izabranoJelo">
+              <thead>
+                <tr>
+                  <th>Jelo ID</th>
+                  <th>Naziv</th>
+                  <th>Kategorija</th>
+                  <th>Oblast</th>
+                  <th>Slika</th>
+                  <th>Vise detalja</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <button class="btn btn-default btn-block stop"><b>PORUCITE OVO JELO</b></button>
+          <button class="btn btn-default btn-block jos"><b>POGLEDAJTE DALJE</b></button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <h3 class="text-center"><u>Pronadjite jela po vise kriterijuma</u></h3>
+      <br>
+      <div class="col-lg-6 col-sm-6 col-xs-12">
+        <div class="well">
+          <h4>Po nazivu jela:</h4>
+          <div class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>
+                </div>
+                <input type="text" id="unosJela" class="form-control" style="width: 250px;"
+                  placeholder="Unesite delimican ili pun naziv jela...">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-xs-12">
+        <div class="well">
+          <h4>Po prvom slovu jela:</h4>
+          <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="true">izaberite prvo slovo u nazivu jela <span
+                class="caret"></span></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a onclick="prvoSlovo(this.innerHTML);" href="#">A</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div class="well">
+          <h4>Po kategoriji jela:</h4>
+          <select onchange="birajKategoriju(this.value);" class="form-control" id="kategorija">
+            <option value="">Izaberite kategoriju...</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div class="well">
+          <h4>Po podrucju jela:</h4>
+          <select onchange="birajPodrucje(this.value);" class="form-control" id="podrucje">
+            <option value="">Izaberite podrucje...</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-xs-12">
+        <div class="well">
+          <h4>Po sastojku jela:</h4>
+          <select onchange="birajSastojak(this.value);" class="form-control" id="sastojak">
+            <option value="">Izaberite sastojak...</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row svetlo_plava margine">
+      <div class="col-lg-12">
+        <h3 class="text-center"><i>Prikaz rezultata pretrage</i></h3>
+        <br>
+        <table class="table" id="tabelaPretraga">
+          <thead>
+            <tr>
+              <th>Jelo ID</th>
+              <th>Naziv</th>
+              <th>Kategorija</th>
+              <th>Oblast</th>
+              <th>Slika</th>
+              <th>Vise detalja</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+        <p id="nemaRezultata">Trenutno nema rezultata pretrage</p>
+      </div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#omiljena">Lista vasih omiljenih
+      jela</button>
+    <br><br>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+              <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">Lista svih kategorija jela</a>
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body">
+                <ul id="kategorije">
+
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+              <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+                  aria-expanded="false" aria-controls="collapseTwo">Lista svih podrucja odakle su nasa jela</a>
+              </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+              <div class="panel-body">
+                <ul id="oblasti">
+
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+              <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+                  aria-expanded="false" aria-controls="collapseThree">Lista svih sastojaka u nasim jelima</a>
+              </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+              <div class="panel-body">
+                <ul id="sviSastojci">
+
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-xs-12">
+        <h3 class="text-center">Grafikon - Kategorije jela</h3>
+        <div id="grafikon_1"></div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-xs-12">
+        <h3 class="text-center">Grafikon - Podrucja jela</h3>
+        <div id="grafikon_2"></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#" onclick="idiNaVrh();" id="klizac">
+    <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+    <br>
+    vrh
+  </a>
+
+  <div class="modal fade" id="omiljena" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header svetlo_plava">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Lista omiljenih jela</h4>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group">
+
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalDetalji" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title text-center"><i>Vise o jelu</i></h4>
+        </div>
+        <div class="modal-body">
+          <h2 id="naziv"></h2>
+          <div class="row">
+            <div class="col-lg-6 col-xs-6">
+              <p><i>Kategorija:</i> <span id="vrsta"></span></p>
+              <p><i>Podrucje:</i> <span id="oblast"></span></p>
+              <p><i>Opis:</i> <span id="karakteristike"></span></p>
+              <p><i>Priprema video:</i> <a href="" target="blank" id="youtube"></a></p>
+              <p>
+                <b>Glavni sastojci:</b>
+              <ul id="sastojci">
+
+              </ul>
+              </p>
+            </div>
+            <div class="col-lg-6 col-xs-6">
+              <div id="slika"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-xs-12">
+              <h4 class="text-center">Priprema jela</h4>
+              <p id="recept"></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <script src="pretraga.js"></script>
+  <script src="token.js"></script>
+</body>
+</html>
